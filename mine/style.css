@@ -181,14 +181,14 @@
     appearance: none;
     -moz-appearance: none;
     -webkit-appearance: none;
-    content: url('sound-on.webp');
+    /* content: url('sound-on.webp'); */
     display: block;
     outline: none;
     user-select: none;
   }
   
   #sound:checked {
-    content: url('sound-off.webp');
+    /* content: url('sound-off.webp'); */
   }
   
   .status {

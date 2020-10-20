@@ -1,4 +1,3 @@
-// Pavol's game engine
 "use strict";
 
 let MSGame = (function(){

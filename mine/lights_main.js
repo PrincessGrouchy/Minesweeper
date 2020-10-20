@@ -7,24 +7,11 @@ window.addEventListener('load', main);
  * @param {number} col 
  * @param {number} row 
  */
-function flip1( s, col, row) {
-  if( col >= 0 && col < s.cols && row >= 0 && row < s.rows)
-    s.onoff[row * s.rows + col] = ! s.onoff[row * s.rows + col];
-}
-
-/**
- * flip a card with given coordinate and its neigbors
- * 
- * @param {state} s 
- * @param {number} col 
- * @param {number} row 
- */
-function flip( s, col, row) {
-  flip1( s, col, row);
-  flip1( s, col+1, row);
-  flip1( s, col-1, row);
-  flip1( s, col, row+1);
-  flip1( s, col, row-1);
+function flip(s, col, row) {
+  if (col >= 0 && col < s.cols && row >= 0 && row < s.rows) {
+    // if (s.onoff == false) {
+    s.onoff[row * s.rows + col] = !s.onoff[row * s.rows + col];
+  }
 }
 
 /**
@@ -36,11 +23,11 @@ function flip( s, col, row) {
 function make_solvable(s, ncols, nrows) {
   s.moves = 0;
   s.onoff = [];
-  for( let i = 0 ; i < s.rows * s.cols ; i ++)
+  for (let i = 0; i < s.rows * s.cols; i++)
     s.onoff[i] = false;
-  for( let row = 0 ; row < s.rows ; row ++)
-    for( let col = 0 ; col < s.cols ; col ++)
-      if( Math.random() < 0.5)
+  for (let row = 0; row < s.rows; row++)
+    for (let col = 0; col < s.cols; col++)
+      if (Math.random() < 0.5)
         flip(s, col, row);
 }
 
@@ -52,13 +39,13 @@ function make_solvable(s, ncols, nrows) {
  */
 function prepare_dom(s) {
   const grid = document.querySelector(".grid");
-  const nCards = 9 * 9 ; // max grid size
-  for( let i = 0 ; i < nCards ; i ++) {
+  const nCards = 9 * 9; // max grid size
+  for (let i = 0; i < nCards; i++) {
     const card = document.createElement("div");
     card.className = "card";
     card.setAttribute("data-cardInd", i);
     card.addEventListener("click", () => {
-      card_click_cb( s, card, i);
+      card_click_cb(s, card, i);
     });
     grid.appendChild(card);
   }
@@ -74,22 +61,22 @@ function prepare_dom(s) {
 function render(s) {
   const grid = document.querySelector(".grid");
   grid.style.gridTemplateColumns = `repeat(${s.cols}, 1fr)`;
-  for( let i = 0 ; i < grid.children.length ; i ++) {
+  for (let i = 0; i < grid.children.length; i++) {
     const card = grid.children[i];
     const ind = Number(card.getAttribute("data-cardInd"));
-    if( ind >= s.rows * s.cols) {
+    if (ind >= s.rows * s.cols) {
       card.style.display = "none";
     }
     else {
       card.style.display = "block";
-      if(s.onoff[ind])
+      if (s.onoff[ind])
         card.classList.add("flipped");
       else
         card.classList.remove("flipped");
     }
   }
   document.querySelectorAll(".moveCount").forEach(
-    (e)=> {
+    (e) => {
       e.textContent = String(s.moves);
     });
 }
@@ -108,10 +95,10 @@ function card_click_cb(s, card_div, ind) {
   const row = Math.floor(ind / s.cols);
   card_div.classList.toggle("flipped");
   flip(s, col, row);
-  s.moves ++;
+  s.moves++;
   render(s);
   // check if we won and activate overlay if we did
-  if( s.onoff.reduce((res,l)=>res && !l, true)) {
+  if (s.onoff.reduce((res, l) => res && !l, true)) {
     document.querySelector("#overlay").classList.toggle("active");
   }
   clickSound.play();
@@ -143,14 +130,14 @@ function main() {
     moves: 0,
     onoff: []
   }
-  
+
   // get browser dimensions - not used in thise code
   let html = document.querySelector("html");
   console.log("Your render area:", html.clientWidth, "x", html.clientHeight)
-  
+
   // register callbacks for buttons
-  document.querySelectorAll(".menuButton").forEach((button) =>{
-    [rows,cols] = button.getAttribute("data-size").split("x").map(s=>Number(s));
+  document.querySelectorAll(".menuButton").forEach((button) => {
+    [rows, cols] = button.getAttribute("data-size").split("x").map(s => Number(s));
     button.innerHTML = `${cols} &#x2715; ${rows}`
     button.addEventListener("click", button_cb.bind(null, state, cols, rows));
   });
@@ -159,7 +146,7 @@ function main() {
   document.querySelector("#overlay").addEventListener("click", () => {
     document.querySelector("#overlay").classList.remove("active");
     make_solvable(state);
-    render(state); 
+    render(state);
   });
 
   // sound callback
@@ -170,7 +157,7 @@ function main() {
 
 
   // create enough cards for largest game and register click callbacks
-  prepare_dom( state);
+  prepare_dom(state);
 
   // simulate pressing 4x4 button to start new game
   button_cb(state, 4, 4);
