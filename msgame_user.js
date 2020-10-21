@@ -115,8 +115,8 @@ function render(s) {
     }
     document.querySelectorAll(".bombCount").forEach(
         (e) => {
-            e.textContent = String(gameStatus.nmarked) + " Marked / "
-                + String(gameStatus.nmines - gameStatus.nmarked) + " Total";
+            e.textContent = String(gameStatus.nmarked) + " marked/"
+                + String(gameStatus.nmines - gameStatus.nmarked) + " remaining";
         });
 }
 

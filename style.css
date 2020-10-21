@@ -41,12 +41,12 @@
     transform: rotateY(0deg);
   }
   .card.number {
-    /* background-image: url(on.webp); */
     background-color: rgb(148, 148, 148);
     opacity: 1;
     transform: rotateY(0deg);
   }
   .card.number[data-number="1"] {
+    /* sorry, didn't know better way :( */
     background-image: url(numbers/one.png);
   }
   .card.number[data-number="2"] {
@@ -101,7 +101,7 @@
     display: flex;
     justify-content: center;
     /* margin-bottom: 0.5em; */
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
   }
   
@@ -125,10 +125,23 @@
     justify-content: center;
     align-items: stretch;
     /* how do you tell the difference between portrait and landscape ;( */
-    max-width: 800px; 
+    max-width: 90%; 
     max-height: 85%;
     /* this is supposed to center */
     margin: 0 auto; 
+  }
+  @media (max-width: 400px) {
+    /* mobile/portait mode? */
+    /* .gridwrapper { */
+      /* how do you tell the difference between portrait and landscape ;( */
+      /* max-width: 800px;  */
+    /* } */
+
+    /* .menuButton { */
+      /* padding: 0px 0em ;
+      border-radius: 0em; */
+      /* font-size:3em; */
+    /* } */
   }
   
   #overlay {
