@@ -1,23 +1,24 @@
 window.addEventListener('load', main);
 let clickSound = new Audio("sounds/clunk.mp3");
 let boomSound = new Audio("sounds/1 booom.wav");
-/**
- * flips a single card (if coordinates valid)
- * 
- * @param {state} s 
- * @param {number} col 
- * @param {number} row 
- */
-function flip(s, col, row) {
-    // if (col >= 0 && col < s.getStatus().cols
-    //     && row >= 0 && row < s.getStatus().rows) {
-        s.uncover(row, col);
-    // console.log("tried to uncover" + col + "," + row);
-    // render(s);
-    // if (s.onoff == false) {
-    // s.onoff[row * s.rows + col] = !s.onoff[row * s.rows + col];
-    // }
-}
+// /**
+//  * flips a single card (if coordinates valid)
+//  * 
+//  * @param {state} s 
+//  * @param {number} col 
+//  * @param {number} row 
+//  */
+// function flip(s, col, row) {
+//     // if (col >= 0 && col < s.getStatus().cols
+//     //     && row >= 0 && row < s.getStatus().rows) {
+//     s.uncover(row, col);
+//     // console.log("tried to uncover" + col + "," + row);
+//     // render(s);
+//     // if (s.onoff == false) {
+//     // s.onoff[row * s.rows + col] = !s.onoff[row * s.rows + col];
+//     // }
+// }
+
 /**
 * creates enough cards for largest board -(9x9)- 
 * 18x14
@@ -35,7 +36,14 @@ function prepare_dom(s) {
         card.addEventListener("click", () => {
             card_click_cb(s, card, i);
         });
-        //long click needed
+        // card.addEventListener("mousedown", start);
+        // card.addEventListener("touchstart", start);
+        // card.addEventListener("click", click);
+        // card.addEventListener("mouseout", cancel);
+        // card.addEventListener("touchend", cancel);
+        // card.addEventListener("touchleave", cancel);
+        // card.addEventListener("touchcancel", cancel);
+        //long click needed? can it be put inside the event listener?
         grid.appendChild(card);
     }
 }
@@ -66,7 +74,7 @@ function render(s) {
         }
         else {
             state = gameRender[currRow][currCol]; //jesus? wtf is this switched?
-            console.log(state, i,"State is")
+            // console.log(state, i, "State is")
             card.style.display = "block";
             // console.log(state + " state of " + i);
             //      "H" = hidden cell - no bomb
@@ -99,13 +107,6 @@ function render(s) {
                 card.setAttribute("data-number", state); //numbers 0-9 only
             }
         }
-        // else {
-        //     card.style.display = "block";
-        //     if (s.onoff[ind])
-        //         card.classList.add("flipped");
-        //     else
-        //         card.classList.remove("flipped");
-        // }
     }
     document.querySelectorAll(".bombCount").forEach(
         (e) => {
@@ -127,11 +128,42 @@ function card_click_cb(s, card_div, ind) {
     const col = ind % gameStatus.ncols;
     const row = Math.floor(ind / gameStatus.ncols);
     // card_div.classList.toggle("flipped");
-    flip(s, col, row);
+    s.uncover(row, col);
     // s.moves++;
     render(s);
 
+    checkWin(s);
+    
+ 
+
+    clickSound.play();
+
+}
+
+/**
+ * callback for clicking a card
+ * - toggle surrounding elements
+ * - check for winning condition
+ * @param {state} s 
+ * @param {HTMLElement} card_div 
+ * @param {number} ind 
+ */
+function card_long_click_cb(s, card_div, ind) {
+    const gameStatus = s.getStatus();
+    const col = ind % gameStatus.ncols;
+    const row = Math.floor(ind / gameStatus.ncols);
+    // card_div.classList.toggle("flipped");
+    s.mark(row, col);
+    // s.moves++;
+    render(s);
+    checkWin(s);
+    clickSound.play();
+}
+
+function checkWin(s){
     // check if we won and activate overlay if we did
+    const gameStatus = s.getStatus();
+
     if (gameStatus.exploded === true) {
         console.log("You lost");
         boomSound.play();
@@ -144,11 +176,19 @@ function card_click_cb(s, card_div, ind) {
 
         document.querySelector("#overlay").classList.toggle("active");
     }
+    else if (gameStatus.done === true) {
+        console.log("You won");
+        boomSound.play();
+        document.querySelectorAll(".winOrLose").forEach(
+            (e) => {
+                e.textContent = String(gameStatus.nmarked) + " Marked / "
+                    + String(gameStatus.nmines - gameStatus.nmarked) + " Total";
+            });
+        document.querySelector(".winOrLose").textContent = "win";
 
-    clickSound.play();
-    
+        document.querySelector("#overlay").classList.toggle("active");
+    }
 }
-
 
 function gameStartButtonClick(s, cols, rows, bombs) {
     // s.cols = cols;
@@ -163,7 +203,7 @@ function gameStartButtonClick(s, cols, rows, bombs) {
 
 function main() {
     let game = new MSGame();
-    game.init( 8, 10, 10);
+    game.init(8, 10, 10);
     // get browser dimensions - not used in thise code
     let html = document.querySelector("html");
     console.log("Your render area:", html.clientWidth, "x", html.clientHeight)
@@ -177,7 +217,7 @@ function main() {
 
     });
 
-    // // callback for overlay click - hide overlay and regenerate game
+    // callback for overlay click - hide overlay and regenerate game
     document.querySelector("#overlay").addEventListener("click", () => {
         document.querySelector("#overlay").classList.remove("active");
         //clear game!
@@ -185,11 +225,11 @@ function main() {
         render(game);
     });
 
-    // // sound callback
+    // sound callback
     let soundButton = document.querySelector("#sound");
     soundButton.addEventListener("change", () => {
-      clickSound.volume = soundButton.checked ? 0 : 1;
-      boomSound.volume = soundButton.checked ? 0 : 1;
+        clickSound.volume = soundButton.checked ? 0 : 1;
+        boomSound.volume = soundButton.checked ? 0 : 1;
     });
 
 
