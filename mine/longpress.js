@@ -41,7 +41,8 @@ var start = function(e) {
 
     if (presstimer === null) {
         presstimer = setTimeout(function() {
-            alert("long click");
+            // alert("long click");
+            card_long_click_cb(s, card, i);
             longpress = true;
             
         }, 1000);

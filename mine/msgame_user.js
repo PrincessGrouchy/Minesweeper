@@ -1,6 +1,7 @@
 window.addEventListener('load', main);
 let clickSound = new Audio("sounds/clunk.mp3");
 let boomSound = new Audio("sounds/1 booom.wav");
+let pooshSound = new Audio("sounds/poosh.wav");
 // /**
 //  * flips a single card (if coordinates valid)
 //  * 
@@ -36,13 +37,17 @@ function prepare_dom(s) {
         card.addEventListener("click", () => {
             card_click_cb(s, card, i);
         });
-        // card.addEventListener("mousedown", start);
-        // card.addEventListener("touchstart", start);
-        // card.addEventListener("click", click);
-        // card.addEventListener("mouseout", cancel);
-        // card.addEventListener("touchend", cancel);
-        // card.addEventListener("touchleave", cancel);
-        // card.addEventListener("touchcancel", cancel);
+        card.addEventListener("contextmenu", (e) => {
+            card_long_click_cb(s, card, i);
+            e.preventDefault(); //no right-click menu hopefully?
+        });
+        // card.addEventListener("mousedown", coolStart);
+        // card.addEventListener("touchstart", coolStart);
+        // card.addEventListener("click", coolClick);
+        // card.addEventListener("mouseout", coolCancel);
+        // card.addEventListener("touchend", coolCancel);
+        // card.addEventListener("touchleave", coolCancel);
+        // card.addEventListener("touchcancel", coolCancel);
         //long click needed? can it be put inside the event listener?
         grid.appendChild(card);
     }
@@ -167,25 +172,13 @@ function checkWin(s){
     if (gameStatus.exploded === true) {
         console.log("You lost");
         boomSound.play();
-        document.querySelectorAll(".winOrLose").forEach(
-            (e) => {
-                e.textContent = String(gameStatus.nmarked) + " Marked / "
-                    + String(gameStatus.nmines - gameStatus.nmarked) + " Total";
-            });
         document.querySelector(".winOrLose").textContent = "lose";
-
         document.querySelector("#overlay").classList.toggle("active");
     }
     else if (gameStatus.done === true) {
         console.log("You won");
-        boomSound.play();
-        document.querySelectorAll(".winOrLose").forEach(
-            (e) => {
-                e.textContent = String(gameStatus.nmarked) + " Marked / "
-                    + String(gameStatus.nmines - gameStatus.nmarked) + " Total";
-            });
+        pooshSound.play();
         document.querySelector(".winOrLose").textContent = "win";
-
         document.querySelector("#overlay").classList.toggle("active");
     }
 }
@@ -200,10 +193,16 @@ function gameStartButtonClick(s, cols, rows, bombs) {
     s.init(cols, rows, bombs);
     render(s);
 }
+function writeTimer(){
+    // document.querySelector(".secondCount").innerHTML = d.toLocaleDateString();
+
+}
 
 function main() {
     let game = new MSGame();
     game.init(8, 10, 10);
+
+
     // get browser dimensions - not used in thise code
     let html = document.querySelector("html");
     console.log("Your render area:", html.clientWidth, "x", html.clientHeight)
@@ -230,6 +229,7 @@ function main() {
     soundButton.addEventListener("change", () => {
         clickSound.volume = soundButton.checked ? 0 : 1;
         boomSound.volume = soundButton.checked ? 0 : 1;
+        pooshSound.volume = soundButton.checked ? 0 : 1;
     });
 
 
