@@ -136,11 +136,7 @@ function card_click_cb(s, card_div, ind) {
     s.uncover(row, col);
     // s.moves++;
     render(s);
-
     checkWin(s);
-    
- 
-
     clickSound.play();
 
 }
@@ -157,28 +153,28 @@ function card_long_click_cb(s, card_div, ind) {
     const gameStatus = s.getStatus();
     const col = ind % gameStatus.ncols;
     const row = Math.floor(ind / gameStatus.ncols);
-    // card_div.classList.toggle("flipped");
     s.mark(row, col);
-    // s.moves++;
     render(s);
     checkWin(s);
     clickSound.play();
 }
 
-function checkWin(s){
+function checkWin(s) {
     // check if we won and activate overlay if we did
     const gameStatus = s.getStatus();
 
     if (gameStatus.exploded === true) {
         console.log("You lost");
         boomSound.play();
-        document.querySelector(".winOrLose").textContent = "lose";
+        timerPause();
+        document.querySelector(".winOrLose").innerHTML = "lose";
         document.querySelector("#overlay").classList.toggle("active");
     }
     else if (gameStatus.done === true) {
         console.log("You won");
         pooshSound.play();
-        document.querySelector(".winOrLose").textContent = "win";
+        timerPause();
+        document.querySelector(".winOrLose").innerHTML = "win";
         document.querySelector("#overlay").classList.toggle("active");
     }
 }
@@ -191,17 +187,16 @@ function gameStartButtonClick(s, cols, rows, bombs) {
     // call to msgame 
     // I think this is swapped around, I'm getting rows and cols switched
     s.init(cols, rows, bombs);
+    // timerReset()
+    // timerStart();
     render(s);
-}
-function writeTimer(){
-    // document.querySelector(".secondCount").innerHTML = d.toLocaleDateString();
-
 }
 
 function main() {
     let game = new MSGame();
     game.init(8, 10, 10);
 
+    timerStart();
 
     // get browser dimensions - not used in thise code
     let html = document.querySelector("html");
@@ -220,6 +215,8 @@ function main() {
     document.querySelector("#overlay").addEventListener("click", () => {
         document.querySelector("#overlay").classList.remove("active");
         //clear game!
+        timerReset();
+        timerStart();
         gameStartButtonClick(game, 10, 8, 10);
         render(game);
     });

@@ -9,6 +9,7 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
     <script src="msgame.js"></script>
     <script src="msgame_user.js"></script>
+    <script src="timer.js"></script>
     <meta name="author" content="Rebecca Reid">
     
 
@@ -28,12 +29,12 @@
     <div class="status">
         <!-- Number of moves: <span class="moveCount">0</span> <br> -->
         Number of bombs: <span class="bombCount">0</span>
-        | Seconds: <span class="secondCount">0</span>
+        | Time elapsed: <span class="secondCount">0</span>
     </div>
     <div id="overlay">
         <div id="overlayin">
-            <p class="big glow">Congratulations, you <span class="winOrLose">won</span>!!!</p>
-            <p class="darker">It took you <span class="secondCount">0</span> seconds</p>
+            <p class="big glow">Congratulations, you <span class="big glow winOrLose">won</span>!!!</p>
+            <p class="darker">Time taken: <span class="finalSecondCount">0</span></p>
             <p class="darker">Click anywhere to start a new game.
         </div>
     </div>
