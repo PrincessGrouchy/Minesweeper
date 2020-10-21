@@ -25,21 +25,38 @@
     animation: fadeIn 0.5s;
     animation-fill-mode: forwards;
   }
-  
-  .card.number {
-    /* background-image: url(on.webp); */
-    background-color: yellow;
-    opacity: 1;
-    transform: rotateY(0deg);
-  }
+
   .card.hidden {
-    background-color: blue;
+    background-color: rgb(59, 59, 59);
+    transform: rotateY(0deg);
   }
   .card.flag {
     background-color: green;
+    background-image: url(numbers/flag.png);
+    transform: rotateY(0deg);
   }
   .card.exploded {
+    background-image: url(mine_icon.png);
     background-color: red;
+    transform: rotateY(0deg);
+  }
+  .card.number {
+    /* background-image: url(on.webp); */
+    background-color: rgb(148, 148, 148);
+    opacity: 1;
+    transform: rotateY(0deg);
+  }
+  .card.number[data-number="1"] {
+    background-image: url(numbers/one.png);
+  }
+  .card.number[data-number="2"] {
+    background-image: url(numbers/two.png);
+  }
+  .card.number[data-number="3"] {
+    background-image: url(numbers/three.png);
+  }
+  .card.number[data-number="4"] {
+    background-image: url(numbers/four.png);
   }
   .grid {
     display: grid;
@@ -184,7 +201,7 @@
     to { transform: scale(1) rotateX(360deg) ;  opacity: 1; }
   }
   
-  /* #sound {
+  #sound {
     width: 40px;
     height: 30px;
     appearance: none;
@@ -198,7 +215,7 @@
   
   #sound:checked {
     content: url('sound-off.webp');
-  } */
+  }
   
   .status {
     margin-top: 5px;

@@ -1,5 +1,6 @@
 window.addEventListener('load', main);
-
+let clickSound = new Audio("sounds/clunk.mp3");
+let boomSound = new Audio("sounds/1 booom.wav");
 /**
  * flips a single card (if coordinates valid)
  * 
@@ -74,17 +75,26 @@ function render(s) {
             // '0'..'9' = number of mines in adjacent cells
             if (state === "H") {
                 card.classList.add("hidden");
+                card.classList.remove("flag");
+                card.classList.remove("exploded");
+                card.classList.remove("number");
             }
             else if (state === "F") {
                 card.classList.remove("hidden");
                 card.classList.add("flag");
+                card.classList.remove("exploded");
+                card.classList.remove("number");
             }
             else if (state === "M") {
                 card.classList.remove("hidden");
+                card.classList.remove("flag");
                 card.classList.add("exploded");
+                card.classList.remove("number");
             }
             else {
                 card.classList.remove("hidden");
+                card.classList.remove("flag");
+                card.classList.remove("exploded");
                 card.classList.add("number");
                 card.setAttribute("data-number", state); //numbers 0-9 only
             }
@@ -124,6 +134,7 @@ function card_click_cb(s, card_div, ind) {
     // check if we won and activate overlay if we did
     if (gameStatus.exploded === true) {
         console.log("You lost");
+        boomSound.play();
         document.querySelectorAll(".winOrLose").forEach(
             (e) => {
                 e.textContent = String(gameStatus.nmarked) + " Marked / "
@@ -133,7 +144,9 @@ function card_click_cb(s, card_div, ind) {
 
         document.querySelector("#overlay").classList.toggle("active");
     }
-    // clickSound.play();
+
+    clickSound.play();
+    
 }
 
 
@@ -167,15 +180,17 @@ function main() {
     // // callback for overlay click - hide overlay and regenerate game
     document.querySelector("#overlay").addEventListener("click", () => {
         document.querySelector("#overlay").classList.remove("active");
-        //   make_solvable(state);
-        //   render(state);
+        //clear game!
+        gameStartButtonClick(game, 10, 8, 10);
+        render(game);
     });
 
     // // sound callback
-    // let soundButton = document.querySelector("#sound");
-    // soundButton.addEventListener("change", () => {
-    //   clickSound.volume = soundButton.checked ? 0 : 1;
-    // });
+    let soundButton = document.querySelector("#sound");
+    soundButton.addEventListener("change", () => {
+      clickSound.volume = soundButton.checked ? 0 : 1;
+      boomSound.volume = soundButton.checked ? 0 : 1;
+    });
 
 
     // create enough cards for largest game and register click callbacks
