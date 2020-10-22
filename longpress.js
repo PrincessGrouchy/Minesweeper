@@ -1,10 +1,9 @@
 // Stolen directly from https://stackoverflow.com/questions/2625210/long-press-in-javascript
-var node = document.getElementsByTagName("p")[0];
 var longpress = false;
 var presstimer = null;
 var longtarget = null;
 
-var cancel = function(e) {
+var coolCancel = function(e) {
     if (presstimer !== null) {
         clearTimeout(presstimer);
         presstimer = null;
@@ -13,40 +12,36 @@ var cancel = function(e) {
     this.classList.remove("longpress");
 };
 
-var click = function(e) {
+var coolClick = function(s, card, i) {
     if (presstimer !== null) {
         clearTimeout(presstimer);
         presstimer = null;
     }
 
-    this.classList.remove("longpress");
+    card.classList.remove("longpress");
 
     if (longpress) {
         return false;
     }
+    console.log("short press:");
     card_click_cb(s, card, i);
-    // alert("press");
 };
 
-var start = function(e) {
-    console.log(e);
-
+var coolStart = function(e, s, card, i) {
+    // console.log(e);
     if (e.type === "click" && e.button !== 0) {
         return;
     }
-
     longpress = false;
-
-    this.classList.add("longpress");
-
+    card.classList.add("longpress");
     if (presstimer === null) {
         presstimer = setTimeout(function() {
-            // alert("long click");
+            alert("long click");
+            console.log("long press:");
             card_long_click_cb(s, card, i);
             longpress = true;
             
         }, 1000);
     }
-
     return false;
 };

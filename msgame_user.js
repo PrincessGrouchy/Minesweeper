@@ -2,6 +2,14 @@ window.addEventListener('load', main);
 let clickSound = new Audio("sounds/clunk.mp3");
 let boomSound = new Audio("sounds/1 booom.wav");
 let pooshSound = new Audio("sounds/poosh.wav");
+
+// var start;
+// var longpress = 1300; // i dunno if these need to be global?? js is confusing
+
+var longpress = false;
+var presstimer = null;
+var longtarget = null;
+
 // /**
 //  * flips a single card (if coordinates valid)
 //  * 
@@ -34,21 +42,111 @@ function prepare_dom(s) {
         const card = document.createElement("div");
         card.className = "card";
         card.setAttribute("data-cardInd", i);
-        card.addEventListener("click", () => {
-            card_click_cb(s, card, i);
-        });
-        card.addEventListener("contextmenu", (e) => {
-            card_long_click_cb(s, card, i);
-            e.preventDefault(); //no right-click menu hopefully?
-        });
-        // card.addEventListener("mousedown", coolStart);
-        // card.addEventListener("touchstart", coolStart);
-        // card.addEventListener("click", coolClick);
+        // card.addEventListener("click", () => {
+        //     card_click_cb(s, card, i);
+        // });
+        // card.addEventListener("contextmenu", (e) => {
+        //     card_long_click_cb(s, card, i);
+        //     e.preventDefault(); //no right-click menu hopefully?
+        // });
+        /////////////////////
+        // jQuery(card).on("tap", function (e) { card_click_cb(s, card, i); })
+        // jQuery(card).on("taphold", function (e) { card_long_click_cb(s, card, i); })
+        /////////////// stolen from https://codepen.io/thetallweeks/pen/uAEGr
+        // card.addEventListener('mousedown', function (e) {
+        //     delay = setTimeout(check, longpress);
+
+        //     function check() {
+        //         card_long_click_cb(s, card, i);
+        //     }
+        //     card_click_cb(s, card, i);
+
+        // }, true);
+        // card.addEventListener('mouseup', function (e) {
+        //     // On mouse up, we know it is no longer a longpress
+        //     clearTimeout(delay);
+        // });
+        // card.addEventListener('mouseout', function (e) {
+        //     clearTimeout(delay);
+        // });
+        //////////////////////////////// https://stackoverflow.com/questions/14586883/how-to-detect-a-long-press-on-a-div-in-jquery
+        // jQuery(card).on('mousedown', function (e) {
+        //     start = new Date().getTime();
+
+        // });
+
+        // jQuery(card).on('mouseleave', function (e) {
+        //     start = 0;
+        // });
+
+        // jQuery(card).on('mouseup', function (e) {
+        //     if (new Date().getTime() >= (start + longpress)) {
+        //         card_long_click_cb(s, card, i);
+        //     } else {
+        //         card_click_cb(s, card, i);
+        //     }
+        // });
+        /////////////////////////////////https://stackoverflow.com/questions/2625210/long-press-in-javascript
+        // card.classList = "card";
+        // card.addEventListener("mousedown", function (e) {
+        //     // console.log(e);
+        //     // if (e.type === "click" && e.button !== 0) {
+        //     //     return;
+        //     // }
+        //     longpress = false;
+        //     card.classList.add("longpress");
+        //     if (presstimer === null) {
+        //         presstimer = setTimeout(function () {
+        //             console.log("long press: mouse");
+        //             card_long_click_cb(s, card, i);
+        //             longpress = true;
+
+        //         }, 1000);
+        //     }
+        //     return false;
+        // });
+        // card.addEventListener("touchstart", function (e) {
+        //     // console.log(e);
+        //     // if (e.type === "click" && e.button !== 0) {
+        //     //     return;
+        //     // }
+        //     longpress = false;
+        //     card.classList.add("longpress");
+        //     if (presstimer === null) {
+        //         presstimer = setTimeout(function () {
+        //             console.log("long press: touchstart");
+        //             card_long_click_cb(s, card, i);
+        //             longpress = true;
+
+        //         }, 1000);
+        //     }
+        //     return false;
+        // });
+        // card.addEventListener("mouseup", function (e) {
+        //     if (e.type === "click" && e.button === 2) {
+        //         console.log("long press: mouseup");
+        //         card_long_click_cb(s, card, i);
+        //         return;
+        //     }
+        //     console.log(e.button, "e button");
+        //     if (presstimer !== null) {
+        //         clearTimeout(presstimer);
+        //         presstimer = null;
+        //     }
+        //     card.classList.remove("longpress");
+        //     if (longpress) {
+        //         return false;
+        //     }
+        //     if (e.button === 0) {
+        //         console.log("short press: click");
+        //         card_click_cb(s, card, i);
+        //     }
+        // });
         // card.addEventListener("mouseout", coolCancel);
         // card.addEventListener("touchend", coolCancel);
         // card.addEventListener("touchleave", coolCancel);
         // card.addEventListener("touchcancel", coolCancel);
-        //long click needed? can it be put inside the event listener?
+        ///////////////////////////////////////////
         grid.appendChild(card);
     }
 }
