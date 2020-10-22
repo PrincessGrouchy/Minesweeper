@@ -53,7 +53,10 @@ function prepare_dom(s) {
         // });
         /////////////////////
         jQuery(card).on("tap", function (e) { card_click_cb(s, card, i); })
-        jQuery(card).on("taphold", function (e) { card_long_click_cb(s, card, i); })
+        jQuery(card).on("taphold", function (e) {
+            $.event.special.tap.emitTapOnTaphold = false;
+            card_long_click_cb(s, card, i);
+        })
         /////////////////////////https://stackoverflow.com/questions/10502383/jquery-calling-click-event-after-taphold-event
         // card.addEventListener('vmousedown vmouseup', function(e){
         //     if (e.type == 'vmousedown') {
@@ -66,13 +69,13 @@ function prepare_dom(s) {
         //         //event.type == 'vmouseup'
         //         //clear the timeout if it hasn't yet occured
         //         clearTimeout(tapTimer);    
-        
+
         //         //if the flag is set to false then this is a `tap` event
         //         if (!isTapHold) {
         //             //this is a tap, not a tap-hold
         //             card_click_cb(s, card, i);
         //         }
-        
+
         //         //reset flag
         //         isTapHold = false;
         //     }
@@ -330,12 +333,13 @@ function main() {
         [cols, rows, bombs] = button.getAttribute("data-size").split("x").map(s => Number(s));
         // button.innerHTML = `${cols} &#x2715; ${rows} &#x2715; ${bombs}`
         // button.addEventListener("click", button_cb.bind(null, state, cols, rows));
-        button.addEventListener("click", gameStartButtonClick.bind(null, game, cols, rows, bombs));
-
+        // button.addEventListener("click", gameStartButtonClick.bind(null, game, cols, rows, bombs));
+        jQuery(button).on("tap", gameStartButtonClick.bind(null, game, cols, rows, bombs));
     });
 
     // callback for overlay click - hide overlay and regenerate game
-    document.querySelector("#overlay").addEventListener("click", () => {
+    // document.querySelector("#overlay").addEventListener("click", () => {
+    jQuery("#overlay").on("tap", () => {
         document.querySelector("#overlay").classList.remove("active");
         //clear game!
         timerReset();
