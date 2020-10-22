@@ -55,11 +55,11 @@ function prepare_dom(s) {
         // });
         /////////////////////
         jQuery(card).on("tap", function (e) {
-            $.event.special.tap.emitTapOnTaphold = false;
+            // $.event.special.tap.emitTapOnTaphold = false;
             card_click_cb(s, card, i);
         })
         jQuery(card).on("taphold", function (e) {
-            $.event.special.tap.emitTapOnTaphold = false;
+            // $.event.special.tap.emitTapOnTaphold = false;
             card_long_click_cb(s, card, i);
         })
         /////////////////////////https://stackoverflow.com/questions/10502383/jquery-calling-click-event-after-taphold-event
