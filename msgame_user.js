@@ -48,12 +48,20 @@ function prepare_dom(s) {
         //     card_click_cb(s, card, i);
         // });
         card.addEventListener("contextmenu", (e) => {
-            card_long_click_cb(s, card, i);
-            e.preventDefault(); //no right-click menu hopefully?
+            if (e.button === 2) {
+                card_long_click_cb(s, card, i);
+                e.preventDefault(); //no right-click menu hopefully?
+            }
         });
         /////////////////////
-        jQuery(card).on("tap", function (e) { card_click_cb(s, card, i); })
-        jQuery(card).on("taphold", function (e) { card_long_click_cb(s, card, i); })
+        jQuery(card).on("tap", function (e) {
+            $.event.special.tap.emitTapOnTaphold = false;
+            card_click_cb(s, card, i);
+        })
+        jQuery(card).on("taphold", function (e) {
+            $.event.special.tap.emitTapOnTaphold = false;
+            card_long_click_cb(s, card, i);
+        })
         /////////////////////////https://stackoverflow.com/questions/10502383/jquery-calling-click-event-after-taphold-event
         // card.addEventListener('vmousedown vmouseup', function(e){
         //     if (e.type == 'vmousedown') {
@@ -66,13 +74,13 @@ function prepare_dom(s) {
         //         //event.type == 'vmouseup'
         //         //clear the timeout if it hasn't yet occured
         //         clearTimeout(tapTimer);    
-        
+
         //         //if the flag is set to false then this is a `tap` event
         //         if (!isTapHold) {
         //             //this is a tap, not a tap-hold
         //             card_click_cb(s, card, i);
         //         }
-        
+
         //         //reset flag
         //         isTapHold = false;
         //     }
