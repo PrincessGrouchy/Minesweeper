@@ -47,7 +47,7 @@ function prepare_dom(s) {
         // card.addEventListener("click", () => {
         //     card_click_cb(s, card, i);
         // });
-        // card.addEventListener("contextmenu", (e) => { I cannot figure out a way to disable this on mobile!!
+        // card.addEventListener("contextmenu", (e) => { I cannot figure out a way to disable this on mobile!! halp
         //     if (e.button === 2) {
         //         card_long_click_cb(s, card, i);
         //         e.preventDefault(); //no right-click menu hopefully?
