@@ -48,7 +48,7 @@ function prepare_dom(s) {
         //     card_click_cb(s, card, i);
         // });
         card.addEventListener("contextmenu", (e) => {
-            if (e.button === 2 || e.button === 3) { //how to get this to work on computer but not mobile?
+            if (e.button === 2) {
                 card_long_click_cb(s, card, i);
                 e.preventDefault(); //no right-click menu hopefully?
             }
@@ -56,22 +56,11 @@ function prepare_dom(s) {
         /////////////////////
         jQuery(card).on("tap", function (e) {
             $.event.special.tap.emitTapOnTaphold = false;
-            console.log(e.button);
-            if (e.button === 2 || e.button === 3) {
-                card_long_click_cb(s, card, i);
-                e.preventDefault(); //no right-click menu hopefully?
-            }
-            else{ //e.button is undefined on mobile?
-                card_click_cb(s, card, i);
-            }
- 
+            card_click_cb(s, card, i);
         })
         jQuery(card).on("taphold", function (e) {
-            if (!(e.button === 2) && !(e.button === 3)) {
-                $.event.special.tap.emitTapOnTaphold = false;
-                card_long_click_cb(s, card, i);
-                e.preventDefault();
-            }
+            $.event.special.tap.emitTapOnTaphold = false;
+            card_long_click_cb(s, card, i);
         })
         /////////////////////////https://stackoverflow.com/questions/10502383/jquery-calling-click-event-after-taphold-event
         // card.addEventListener('vmousedown vmouseup', function(e){
