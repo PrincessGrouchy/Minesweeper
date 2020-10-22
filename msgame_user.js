@@ -6,10 +6,12 @@ let pooshSound = new Audio("sounds/poosh.wav");
 // var start;
 // var longpress = 1300; // i dunno if these need to be global?? js is confusing
 
-var longpress = false;
-var presstimer = null;
-var longtarget = null;
+// var longpress = false;
+// var presstimer = null;
+// var longtarget = null;
 
+// var taptimer = false;
+var isTapHold = false;
 // /**
 //  * flips a single card (if coordinates valid)
 //  * 
@@ -45,13 +47,36 @@ function prepare_dom(s) {
         // card.addEventListener("click", () => {
         //     card_click_cb(s, card, i);
         // });
-        // card.addEventListener("contextmenu", (e) => {
-        //     card_long_click_cb(s, card, i);
-        //     e.preventDefault(); //no right-click menu hopefully?
-        // });
+        card.addEventListener("contextmenu", (e) => {
+            card_long_click_cb(s, card, i);
+            e.preventDefault(); //no right-click menu hopefully?
+        });
         /////////////////////
-        // jQuery(card).on("tap", function (e) { card_click_cb(s, card, i); })
-        // jQuery(card).on("taphold", function (e) { card_long_click_cb(s, card, i); })
+        jQuery(card).on("tap", function (e) { card_click_cb(s, card, i); })
+        jQuery(card).on("taphold", function (e) { card_long_click_cb(s, card, i); })
+        /////////////////////////https://stackoverflow.com/questions/10502383/jquery-calling-click-event-after-taphold-event
+        // card.addEventListener('vmousedown vmouseup', function(e){
+        //     if (e.type == 'vmousedown') {
+        //         //set the timer to run the `taphold` function in three seconds
+        //         tapTimer = setTimeout(function () {
+        //             isTapHold = true;
+        //             card_long_click_cb(s, card, i);
+        //         }, 1000);
+        //     } else {
+        //         //event.type == 'vmouseup'
+        //         //clear the timeout if it hasn't yet occured
+        //         clearTimeout(tapTimer);    
+        
+        //         //if the flag is set to false then this is a `tap` event
+        //         if (!isTapHold) {
+        //             //this is a tap, not a tap-hold
+        //             card_click_cb(s, card, i);
+        //         }
+        
+        //         //reset flag
+        //         isTapHold = false;
+        //     }
+        // });
         /////////////// stolen from https://codepen.io/thetallweeks/pen/uAEGr
         // card.addEventListener('mousedown', function (e) {
         //     delay = setTimeout(check, longpress);
